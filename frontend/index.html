@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f3f7f6">
+    <title>Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <span class="brand-mark" aria-hidden="true">SM</span>
+            <h1>Student Management System</h1>
+        </div>
+    </header>
+
+    <main class="page-shell">
+        <section class="form-section" aria-labelledby="form-title">
+            <div class="section-heading">
+                <p class="eyebrow">STUDENT RECORD</p>
+                <h2 id="form-title">Add a student</h2>
+            </div>
+            <form id="student-form">
+                <input type="hidden" id="student-id">
+                <div class="form-grid">
+                    <label>
+                        <span>Name</span>
+                        <input id="name" name="name" type="text" autocomplete="name" required maxlength="100">
+                    </label>
+                    <label>
+                        <span>Email</span>
+                        <input id="email" name="email" type="email" autocomplete="email" required maxlength="255">
+                    </label>
+                    <label>
+                        <span>Age</span>
+                        <input id="age" name="age" type="number" min="1" step="1" required>
+                    </label>
+                    <label>
+                        <span>Course</span>
+                        <input id="course" name="course" type="text" list="course-options" required maxlength="100">
+                        <datalist id="course-options">
+                            <option value="React"></option>
+                            <option value="Node.js"></option>
+                            <option value="Python"></option>
+                            <option value="JavaScript"></option>
+                            <option value="Next.js"></option>
+                            <option value="Java"></option>
+                        </datalist>
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button class="button button-primary" id="submit-button" type="submit">Add student</button>
+                    <button class="button button-secondary" id="cancel-edit" type="button" hidden>Cancel edit</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="records-section" aria-labelledby="records-title">
+            <div class="records-heading">
+                <div class="section-heading">
+                    <p class="eyebrow">DIRECTORY</p>
+                    <h2 id="records-title">Students <span id="student-count" class="count">0</span></h2>
+                </div>
+                <output id="status-message" class="status-message" aria-live="polite"></output>
+            </div>
+
+            <div class="toolbar">
+                <label class="search-control">
+                    <span class="visually-hidden">Search students by name</span>
+                    <span class="search-icon" aria-hidden="true">⌕</span>
+                    <input id="search-input" type="search" placeholder="Search students..." autocomplete="off">
+                </label>
+                <label class="filter-control">
+                    <span class="visually-hidden">Filter by course</span>
+                    <select id="course-filter">
+                        <option value="">All courses</option>
+                        <option value="React">React</option>
+                        <option value="Node.js">Node.js</option>
+                        <option value="Python">Python</option>
+                        <option value="JavaScript">JavaScript</option>
+                        <option value="Next.js">Next.js</option>
+                        <option value="Java">Java</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Course</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="student-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
