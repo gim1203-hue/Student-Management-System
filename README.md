@@ -48,6 +48,16 @@ npm start
 
 Expected terminal message: `Server running on port 3000`. Open <http://localhost:3000> in a browser. The frontend and API share the same origin, so CORS configuration is not needed.
 
+## Deploy to Render
+
+The root `render.yaml` prepares a **new Free Node web service** named `student-management-system-api`. It does not create a database, add a custom domain, or change any existing Render service. Applying the Blueprint in Render creates the service, and the Free service can spin down while idle.
+
+Render does not provide MySQL. Before applying the Blueprint, create an empty, remotely reachable MySQL database with a provider that permits connections from Render. Use the provider's TLS connection details. Managed MySQL may have a separate monthly cost; check the provider's current pricing. Run `schema.sql` once against the new empty database if you want its synthetic sample students. Do not upload the students from your local database; it contains personal data.
+
+In Render, create the Blueprint from this GitHub repository and branch `main`. During setup, enter the database's `DB_HOST`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` when prompted. The Blueprint sets `DB_PORT` to `3306` and enables verified TLS with `DB_SSL=true`. If your provider requires a custom CA certificate, add its PEM contents as the `DB_SSL_CA` environment variable in Render. Never commit credentials or the certificate to Git.
+
+After the deployment succeeds, test `https://<your-service>.onrender.com/health` and `/api/students`. Only configure `aihelpall.com` after those endpoints and the frontend work; the domain currently belongs to the existing My-AI-2 service, so moving it will affect that app's domain.
+
 ## API endpoints
 
 | Method | URL | Purpose |

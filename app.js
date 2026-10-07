@@ -7,6 +7,10 @@ app.disable("x-powered-by");
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "frontend")));
 
+app.get("/health", (req, res) => {
+    res.json({ status: "ok" });
+});
+
 function validateStudent(body) {
     if (!body || typeof body !== "object") {
         return "A student object is required.";
@@ -189,7 +193,7 @@ app.delete("/api/students/:id", async (req, res) => {
 
 if (require.main === module) {
     const port = process.env.PORT || 3000;
-    app.listen(port, () => {
+    app.listen(port, "0.0.0.0", () => {
         console.log(`Server running on port ${port}`);
     });
 }
