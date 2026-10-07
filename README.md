@@ -9,7 +9,7 @@ A beginner-friendly student records app using HTML, CSS, vanilla JavaScript, Exp
 - `studentService.js`: parameterized student database queries
 - `.env`: local database settings; do not commit this file
 - `schema.sql`: database, table, and first-run sample data
-- `frontend/`: HTML, CSS, and browser JavaScript
+- `public/`: HTML, CSS, and browser JavaScript (also served by Vercel)
 
 ## Requirements
 
@@ -48,15 +48,33 @@ npm start
 
 Expected terminal message: `Server running on port 3000`. Open <http://localhost:3000> in a browser. The frontend and API share the same origin, so CORS configuration is not needed.
 
-## Deploy to Render
+## Public demo with Vercel and TiDB
 
-The root `render.yaml` prepares a **new Free Node web service** named `student-management-system-api`. It does not create a database, add a custom domain, or change any existing Render service. Applying the Blueprint in Render creates the service, and the Free service can spin down while idle.
+This option keeps the existing `mysql2` client and MySQL-style SQL, but TiDB Cloud Starter is a **MySQL-compatible database product, not MySQL Server**. Use this only if that database substitution is acceptable for your course. Vercel Hobby and TiDB Starter advertise free tiers with quotas; usage beyond TiDB's included allowance can cost money. Set TiDB spend limits before public use and review both providers' current limits.
 
-Render does not provide MySQL. Before applying the Blueprint, create an empty, remotely reachable MySQL database with a provider that permits connections from Render. Use the provider's TLS connection details. Managed MySQL may have a separate monthly cost; check the provider's current pricing. Run `schema.sql` once against the new empty database if you want its synthetic sample students. Do not upload the students from your local database; it contains personal data.
+Before deployment:
 
-In Render, create the Blueprint from this GitHub repository and branch `main`. During setup, enter the database's `DB_HOST`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` when prompted. The Blueprint sets `DB_PORT` to DigitalOcean's managed-MySQL port (`25060`) and enables verified TLS with `DB_SSL=true`. If your provider shows a different port, use the port from its connection details. If the provider requires a custom CA certificate, add its PEM contents as the `DB_SSL_CA` environment variable in Render. Never commit credentials or the certificate to Git.
+- Create a new TiDB Cloud Starter instance and an empty database named `school_db`. Use the connection dialog's **Public** endpoint and TLS.
+- Configure TiDB's public-endpoint IP access list as required for the Vercel deployment. Vercel Hobby does not include dedicated static egress IPs; never place personal data in this demo database.
+- Run `schema.sql` once against the new empty TiDB database to create the table and insert only its synthetic sample students. Do not copy the existing local student data.
+- This sample app has no login. Anyone who reaches the public URL can read, add, edit, and delete demo rows, so treat the hosted data as public and disposable.
 
-After the deployment succeeds, test `https://<your-service>.onrender.com/health` and `/api/students`. Only configure `aihelpall.com` after those endpoints and the frontend work; the domain currently belongs to the existing My-AI-2 service, so moving it will affect that app's domain.
+Deploy the GitHub repository to a Vercel **Hobby** project for personal use. Import `gim1203-hue/Student-Management-System` on branch `main` and leave the project root at the repository root. Vercel detects the root Express `app.js`; `public/` contains the static files served by its CDN. In the project's **Settings → Environment Variables**, add these for Production using the values from TiDB's connection dialog:
+
+```text
+DB_HOST=<TiDB public host>
+DB_PORT=<TiDB connection port>
+DB_USER=<TiDB connection user, exactly as shown>
+DB_PASSWORD=<TiDB password>
+DB_NAME=school_db
+DB_SSL=true
+```
+
+Keep these values in Vercel only; never commit them or paste them into chat. Redeploy after setting them. Verify the Vercel URL at `/health`, `/api/students`, and the root page. Free-tier limits can pause or delay service, and do not guarantee permanent free hosting.
+
+Do not add `aihelpall.com` until the Vercel deployment is verified. That domain currently belongs to the existing Render My-AI-2 service; moving it will affect that app's domain. Vercel will show the exact DNS records to configure.
+
+The existing `render.yaml` is for an alternate Render deployment and is not used by Vercel.
 
 ## API endpoints
 

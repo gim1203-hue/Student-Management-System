@@ -5,7 +5,7 @@ const app = express();
 
 app.disable("x-powered-by");
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "frontend")));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/health", (req, res) => {
     res.json({ status: "ok" });
