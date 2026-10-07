@@ -9,7 +9,8 @@ A beginner-friendly student records app using HTML, CSS, vanilla JavaScript, Exp
 - `studentService.js`: parameterized student database queries
 - `.env`: local database settings; do not commit this file
 - `schema.sql`: database, table, and first-run sample data
-- `public/`: HTML, CSS, and browser JavaScript (also served by Vercel)
+- `public/`: HTML, CSS, browser JavaScript, and Pages API configuration
+- `.github/workflows/pages.yml`: manual GitHub Pages deployment workflow
 
 ## Requirements
 
@@ -48,7 +49,7 @@ npm start
 
 Expected terminal message: `Server running on port 3000`. Open <http://localhost:3000> in a browser. The frontend and API share the same origin, so CORS configuration is not needed.
 
-## Public demo with Vercel and TiDB
+## Public demo with Vercel, TiDB, and GitHub Pages
 
 This option keeps the existing `mysql2` client and MySQL-style SQL, but TiDB Cloud Starter is a **MySQL-compatible database product, not MySQL Server**. Use this only if that database substitution is acceptable for your course. Vercel Hobby and TiDB Starter advertise free tiers with quotas; usage beyond TiDB's included allowance can cost money. Set TiDB spend limits before public use and review both providers' current limits.
 
@@ -71,6 +72,12 @@ DB_SSL=true
 ```
 
 Keep these values in Vercel only; never commit them or paste them into chat. Redeploy after setting them. Verify the Vercel URL at `/health`, `/api/students`, and the root page. Free-tier limits can pause or delay service, and do not guarantee permanent free hosting.
+
+The `public/config.js` file points the GitHub Pages version of the frontend to the Vercel API. Express permits API requests from `https://gim1203-hue.github.io` only. Local development and the Vercel-hosted frontend continue to use same-origin API requests.
+
+### Publish the frontend to GitHub Pages
+
+Deploy and verify the Vercel API first. Then, in the GitHub repository, open **Settings → Pages**, set the source to **GitHub Actions**, and save. Next open **Actions → Deploy GitHub Pages**, run the workflow on `main`, and wait for it to finish. It uploads only `public/`; it does not deploy the Express server or database. The resulting Pages site is `https://gim1203-hue.github.io/Student-Management-System/` and calls the Vercel API. Do not publish before Vercel is working.
 
 Do not add `aihelpall.com` until the Vercel deployment is verified. That domain currently belongs to the existing Render My-AI-2 service; moving it will affect that app's domain. Vercel will show the exact DNS records to configure.
 

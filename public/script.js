@@ -1,4 +1,5 @@
-const apiUrl = "/api/students";
+const apiOrigin = window.STUDENT_API_BASE_URL || "";
+const apiUrl = apiOrigin + "/api/students";
 const studentForm = document.getElementById("student-form");
 const studentIdInput = document.getElementById("student-id");
 const studentTableBody = document.getElementById("student-table-body");

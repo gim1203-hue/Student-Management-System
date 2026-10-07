@@ -5,6 +5,24 @@ const app = express();
 
 app.disable("x-powered-by");
 app.use(express.json());
+const pagesOrigin = process.env.PAGES_ORIGIN || "https://gim1203-hue.github.io";
+app.use((req, res, next) => {
+    const requestOrigin = req.get("origin");
+    if (requestOrigin === pagesOrigin) {
+        res.setHeader("Access-Control-Allow-Origin", pagesOrigin);
+        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        res.setHeader("Vary", "Origin");
+    }
+
+    if (req.method === "OPTIONS") {
+        if (requestOrigin !== pagesOrigin) {
+            return res.sendStatus(403);
+        }
+        return res.sendStatus(204);
+    }
+    next();
+});
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/health", (req, res) => {
